@@ -1,0 +1,16 @@
+#! .venv/bin/python
+
+import sys
+
+import pytest
+
+
+def main(arg: str) -> None:
+    arg = arg[:-1] if arg.endswith("/") else arg
+    test_file = "_".join(arg.split("-")) + "_test.py"
+    pytest.main(["-o", "markers=task", f"{arg}/{test_file}"])
+
+
+if __name__ == "__main__":
+    assert len(sys.argv) == 2
+    main(sys.argv[1])

@@ -1,0 +1,15 @@
+#! .venv/bin/python
+
+import subprocess
+import sys
+
+
+def main(arg: str) -> None:
+    arg = arg[:-1] if arg.endswith("/") else arg
+    file = "_".join(arg.split("-")) + ".py"
+    subprocess.run(f"python {arg}/{file}", shell=True)
+
+
+if __name__ == "__main__":
+    assert len(sys.argv) == 2
+    main(sys.argv[1])
