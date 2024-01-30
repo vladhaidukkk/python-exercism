@@ -5,9 +5,12 @@ import sys
 
 
 def main(arg: str) -> None:
-    arg = arg[:-1] if arg.endswith("/") else arg
-    file = "_".join(arg.split("-")) + ".py"
-    subprocess.run(f"exercism submit {arg}/{file}", shell=True)
+    if arg.endswith(".py"):
+        dir, file = arg.split("/")
+    else:
+        dir = arg[:-1] if arg.endswith("/") else arg
+        file = "_".join(dir.split("-")) + "_test.py"
+    subprocess.run(f"exercism submit {dir}/{file}", shell=True)
 
 
 if __name__ == "__main__":
