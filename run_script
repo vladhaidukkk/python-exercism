@@ -9,7 +9,7 @@ def main(arg: str) -> None:
         dir, file = arg.split("/")
     else:
         dir = arg[:-1] if arg.endswith("/") else arg
-        file = "_".join(dir.split("-")) + "_test.py"
+        file = "_".join(dir.split("-")) + ".py"
     subprocess.run(f"python {dir}/{file}", shell=True)
 
 
