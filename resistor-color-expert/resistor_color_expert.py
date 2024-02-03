@@ -23,37 +23,41 @@ TOLERANCES = {
 }
 
 
-def split_string_in_groups(string):
-    reversed_string = string[::-1]
-    groups = [reversed_string[i : i + 3] for i in range(0, len(reversed_string), 3)]
-    result = [group[::-1] for group in groups]
-    return result[::-1]
+def get_label_components(colors):
+    if len(colors) < 3:
+        num = "".join(str(COLORS[color]) for color in colors[:-1])
+        zeros = ""
+        tolerance = ""
+    if len(colors) == 3:
+        num = "".join(str(COLORS[color]) for color in colors[:-1])
+        zeros = COLORS[colors[-1]] * "0"
+        tolerance = ""
+    elif len(colors) > 3:
+        num = "".join(str(COLORS[color]) for color in colors[:-2])
+        zeros = COLORS[colors[-2]] * "0"
+        tolerance = TOLERANCES[colors[-1]]
+
+    return f"{num}{zeros}".lstrip("0") or "0", tolerance
+
+
+def split_val_in_groups(val):
+    reversed_val = val[::-1]
+    groups = [reversed_val[i : i + 3] for i in range(0, len(reversed_val), 3)]
+    return [group[::-1] for group in groups][::-1]
 
 
 def resistor_label(colors):
-    colors = [color.lower() for color in colors]
+    val, tolerance = get_label_components([c.lower() for c in colors])
+    groups = split_val_in_groups(val)
 
-    num = "".join(str(COLORS[color]) for color in colors[:-2])
-    if len(colors) > 2:
-        zeros = COLORS[colors[-2]] * "0"
-        tolerance = TOLERANCES[colors[-1]]
-    else:
-        zeros = ""
-        tolerance = ""
-
-    val = f"{num}{zeros}".lstrip("0") or "0"
-    groups = split_string_in_groups(val)
-    groups_n = len(groups)
     if len(groups) > 1:
-        val = f"{groups[0]}.{''.join(groups[1:])}"
-        val = val.rstrip("0")
-        val = val.rstrip(".")
+        val = f"{groups[0]}.{''.join(groups[1:])}".rstrip("0").rstrip(".")
 
-    if groups_n == 1:
+    if len(groups) == 1:
         prefix = ""
-    elif groups_n == 2:
+    elif len(groups) == 2:
         prefix = "kilo"
-    elif groups_n == 3:
+    elif len(groups) == 3:
         prefix = "mega"
     else:
         prefix = "giga"
