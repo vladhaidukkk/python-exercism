@@ -71,7 +71,6 @@ class AnagramTest(unittest.TestCase):
     def test_words_are_not_anagrams_of_themselves(self):
         candidates = ["BANANA"]
         expected = []
-        print(find_anagrams("BANANA", candidates))
         self.assertCountEqual(find_anagrams("BANANA", candidates), expected)
 
     def test_words_are_not_anagrams_of_themselves_even_if_letter_case_is_partially_different(
